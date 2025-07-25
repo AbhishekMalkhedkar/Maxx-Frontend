@@ -6,6 +6,8 @@ import { IoEye } from "react-icons/io5";
 import { LuEye } from "react-icons/lu";
 import {authDataContext} from '../context/AuthContext';
 import axios from 'axios';
+import { signInWithPopup } from 'firebase/auth';
+import { auth, provider } from '../../utils/Firebase';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -29,6 +31,27 @@ const Signup = () => {
       console.log(error);
     }
   }
+
+
+  const googleSignUp = async () => {
+    try {
+      const response = await signInWithPopup(auth,provider);
+      console.log(response);
+      const user = response.user;
+      const name = user.displayName;
+      const email = user.email;
+
+      const result = await axios.post(serverUrl + "/api/auth/googlelogin", {
+        name, email}, {withCredentials: true})
+      console.log(result.data);
+        
+
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
+
   return (
     <div className='w-[100vw] h-[100vh] bg-gradient-to-l from-[#141414] to-[#0c2025] text-[white] flex flex-col items-center justify-start'>
       <div className='w-[100%] h-[80px] flex items-center justify-start px-[30px] gap-[10px] cursor-pointer'>
@@ -41,7 +64,7 @@ const Signup = () => {
       </div>
       <div className='max-w-[600px] w-[90%] h-[500px] bg-[#00000025] border-[1px] border-[#96969635] backdrop:blur-2xl rounded-lg shadow-lg flex items-center justify-center'>
         <form action="" onSubmit={handleSignup} className='w-[90%] h-[90%] flex flex-col items-center justify-start gap-[20px]'>
-          <div className='w-[90%] h-[50px] bg-[#42656cae] rounded-lg flex items-center justify-center gap-[10px] py-[20px] cursor-pointer'>
+          <div className='w-[90%] h-[50px] bg-[#42656cae] rounded-lg flex items-center justify-center gap-[10px] py-[20px] cursor-pointer' onClick={googleSignUp} >
             <img src={google} alt="" className='w-[20px]' />Login with Google
           </div>
           <div className='w-[100%] h-[20px] flex items-center justify-center gap-[10px]'>
