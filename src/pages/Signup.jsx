@@ -43,7 +43,7 @@ const Signup = () => {
 
       const result = await axios.post(serverUrl + "/api/auth/googlelogin", {
         name, email}, {withCredentials: true})
-      console.log(result.data);
+      
         
 
     } catch (error) {
