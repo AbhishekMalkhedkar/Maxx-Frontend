@@ -8,6 +8,7 @@ import {authDataContext} from '../context/AuthContext';
 import axios from 'axios';
 import { signInWithPopup } from 'firebase/auth';
 import { auth, provider } from '../../utils/Firebase';
+import { userDataContext } from '../context/UserContext';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const {getCurrentUser, userData} = useContext(userDataContext);
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -25,7 +27,8 @@ const Signup = () => {
       },{withCredentials : true});
 
       console.log(result.data);
-      
+      getCurrentUser();
+      navigate("/");
     
     } catch (error) {
       console.log(error);
@@ -44,7 +47,8 @@ const Signup = () => {
       const result = await axios.post(serverUrl + "/api/auth/googlelogin", {
         name, email}, {withCredentials: true})
       
-        
+      getCurrentUser();
+      navigate("/"); 
 
     } catch (error) {
       console.log(error.message)
